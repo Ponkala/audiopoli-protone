@@ -9,11 +9,11 @@
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-filename="AP__ir"; 
+filename="AP_woofer_ir"; 
 fil = csvread(filename);
 
 %% main
-for i = 1:38 % goes through all the angle steps
+for i = 38:-1:1 % goes through all the angle steps
     if i<=19
         position="_hor_";
         num=1;
@@ -24,6 +24,7 @@ for i = 1:38 % goes through all the angle steps
     angleout=mod(i-1,19)*10;
     anglestr=int2str(angleout);
     outputfilename="frd_files"+filename+"/"+filename+position+anglestr+".frd";
+    
     %% regular fft routine
     resp = fil(:,i);
     L = length(resp);
@@ -36,13 +37,22 @@ for i = 1:38 % goes through all the angle steps
     Iv = 1:length(Fv);                  
     % figure(1)                                     
     % plot(t*1E+6, P); % plot impulse if required
+    ccolormap = colormap(jet);
+    ccolormap = ccolormap(end:-floor(length(ccolormap)/19):1,:);
     grid on
     xlabel('time[\mus]')
     ylabel('amplitude[a.u]')
     figure(num)
+    ax = gca;
+    ax.ColorOrder = ccolormap;
+    ax.CLimMode = "auto";
     ymag=P_FT(Iv)*2;
     ydb = mag2db(abs(ymag));
-    
+    if position == "_hor_"
+        title("horizontal response");
+    else
+        title("vertical response");
+    end
     semilogx(Fv,ydb+166);
     ylim([40 105 ]);
     xlim([19 21000 ]);
@@ -54,6 +64,7 @@ for i = 1:38 % goes through all the angle steps
     absresponse=absresponse(1,:);
     phase=angle(response(1,:));
     phase=phase(1,:);
+    
     %% save to file
     fileID = fopen(outputfilename,'w');
     data=[freq'; mag2db(absresponse)+166;rad2deg(phase)];
