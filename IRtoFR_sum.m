@@ -21,7 +21,7 @@ for i = 38:-1:1 % goes through all the angle steps
         num=1;
     else
         position="_ver_";
-        num=2;
+        num=1;
     end
     angleout=mod(i-1,19)*10;
     anglestr=int2str(angleout);
@@ -45,16 +45,34 @@ for i = 38:-1:1 % goes through all the angle steps
     % plot(t*1E+6, P); % plot impulse if required
     ccolormap = colormap(jet);
     ccolormap = ccolormap(end:-floor(length(ccolormap)/19):1,:);
-    xlabel('frequency[Hz]')
+    xlabel('frequency [Hz]')
     
     figure(num) % create figure
-    subplot(2,1,1);
-    ylabel('SPL')
+    if position == "_hor_"
+        subplot(2,1,1);
+        title("horizontal response");
+    else
+        subplot(2,1,2);
+        title("vertical response");
+    end
+    
+    %% colorbar
+    cb=colorbar;
+    cb.Ticks=linspace(0,1,19);
+    cb.TickLabels = num2cell(0:10:180);
+    cb.Direction = 'reverse';
+    cb.Label.String = "degrees";
+    ylabel('SPL [dB]')
     ax = gca;
     ax.ColorOrder = ccolormap;
     ax.CLimMode = "auto";
-    ymag = P3_FT(Iv)*2;
-    ydb = mag2db(abs(ymag));
+    
+    ymag_tweeter = P_FT(Iv)*2;
+    ymag_woofer = P2_FT(Iv)*2;
+    ymag_sum = P3_FT(Iv)*2;
+    
+    %% set which response to plot
+    ydb = mag2db(abs(ymag_sum)); 
     if position == "_hor_"
         title("horizontal response");
     else
@@ -66,27 +84,46 @@ for i = 38:-1:1 % goes through all the angle steps
     grid on
     hold on
     
-    frd_obj = frd(ymag(1:L/2+1), Fv);
-    subplot(2,1,2);
-    xlim([19 21000 ]);
-    ylabel('Phase')
+    %% create frd objects
+    frd_obj  = frd(ymag_tweeter(1:L/2+1),Fv);
+    frd_obj2 = frd(ymag_woofer(1:L/2+1), Fv);
+    frd_obj3 = frd(ymag_sum(1:L/2+1), Fv);
 
-    ccolormap = ccolormap(end:-floor(length(ccolormap)/19):1,:);
-    ax = gca;
-    ax.ColorOrder = ccolormap;
+%     subplot(2,1,2);
+%     xlim([19 21000 ]);
+%     ylabel('Phases')
+% 
+%     ccolormap = ccolormap(end:-floor(length(ccolormap)/19):1,:);
+%     ax = gca;
+%     ax.ColorOrder = ccolormap;
+
+    %% extract all the phase responses from the frd data
     [response,freq] = frdata(frd_obj);
-    absresponse= abs(response);
-    absresponse=absresponse(1,:);
+    [response2,freq2] = frdata(frd_obj2);
+    [response3,freq3] = frdata(frd_obj3);
+
+    absresponse_T= abs(response);
+    absresponse_T=absresponse_T(1,:);
+    absresponse_W= abs(response2);
+    absresponse_W=absresponse_W(1,:);
+    absresponse_sum= abs(response3);
+    absresponse_sum=absresponse_sum(1,:);
     
     phase=angle(response(1,:));
     phase=phase(1,:);
-    semilogx(Fv, rad2deg(phase));
+    phase2=angle(response2(1,:));
+    phase2=phase2(1,:);
+    phase3=angle(response3(1,:));
+    phase3=phase3(1,:);
+%     dp3=diff(phase3);
+%     dp3(dp3>5.5)=NaN;
+%     semilogx(Fv(1:length(phase3)), phase3);
     grid on
     hold on
 
     %% save to file
     fileID = fopen(outputfilename,'w');
-    data=[freq'; mag2db(absresponse)+166;rad2deg(phase)];
+    data=[freq'; mag2db(absresponse_T)+166;rad2deg(phase)];
     % FRD file format
     fprintf(fileID,"%.3f %.3f %.3f\n",data);
     fclose(fileID);
