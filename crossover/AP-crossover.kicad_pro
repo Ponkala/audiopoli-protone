@@ -35,8 +35,8 @@
         "other_text_upright": false,
         "pads": {
           "drill": 0.0,
-          "height": 2.0,
-          "width": 2.0
+          "height": 3.0,
+          "width": 3.0
         },
         "silk_line_width": 0.15,
         "silk_text_italic": false,
@@ -138,13 +138,13 @@
           "td_on_pad_in_zone": false,
           "td_onpadsmd": true,
           "td_onroundshapesonly": false,
-          "td_ontrackend": false,
+          "td_ontrackend": true,
           "td_onviapad": true
         }
       ],
       "teardrop_parameters": [
         {
-          "td_curve_segcount": 0,
+          "td_curve_segcount": 5,
           "td_height_ratio": 1.0,
           "td_length_ratio": 0.5,
           "td_maxheight": 2.0,
@@ -153,7 +153,7 @@
           "td_width_to_size_filter_ratio": 0.9
         },
         {
-          "td_curve_segcount": 0,
+          "td_curve_segcount": 5,
           "td_height_ratio": 1.0,
           "td_length_ratio": 0.5,
           "td_maxheight": 2.0,
@@ -162,7 +162,7 @@
           "td_width_to_size_filter_ratio": 0.9
         },
         {
-          "td_curve_segcount": 0,
+          "td_curve_segcount": 5,
           "td_height_ratio": 1.0,
           "td_length_ratio": 0.5,
           "td_maxheight": 2.0,
@@ -405,7 +405,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "AP-crossover.kicad_pro",
+    "filename": "AP-crossover-production.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -436,10 +436,10 @@
         "line_style": 0,
         "microvia_diameter": 0.3,
         "microvia_drill": 0.1,
-        "name": "Supply",
+        "name": "in",
         "pcb_color": "rgba(0, 0, 0, 0.000)",
         "schematic_color": "rgba(0, 0, 0, 0.000)",
-        "track_width": 0.4,
+        "track_width": 0.25,
         "via_diameter": 0.8,
         "via_drill": 0.4,
         "wire_width": 6
@@ -452,8 +452,12 @@
     "netclass_assignments": null,
     "netclass_patterns": [
       {
-        "netclass": "Default",
-        "pattern": "+12V"
+        "netclass": "in",
+        "pattern": "/binp"
+      },
+      {
+        "netclass": "in",
+        "pattern": "/binn"
       }
     ]
   },
@@ -461,7 +465,7 @@
     "last_paths": {
       "gencad": "",
       "idf": "",
-      "netlist": "",
+      "netlist": "../../../../../Program Files/KiCad/7.0/",
       "specctra_dsn": "",
       "step": "",
       "vrml": ""
@@ -492,14 +496,6 @@
       "version": 1
     },
     "net_format_name": "",
-    "ngspice": {
-      "fix_include_paths": true,
-      "meta": {
-        "version": 0
-      },
-      "model_mode": 0,
-      "workbook_filename": ""
-    },
     "page_layout_descr_file": "",
     "plot_directory": "",
     "spice_current_sheet_as_root": false,
