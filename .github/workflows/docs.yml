@@ -42,7 +42,7 @@ jobs:
           if [ -f crossover/README.md ]; then
               rm crossover/README.md
           fi
-          echo "# crossover for active crossover" > crossover/README.md
+          echo "# Docs for active crossover" > crossover/README.md
           echo "## Front view" >> crossover/README.md
 
           echo "<p align="center"><img src="Docs/front.svg?sanitize=true" width=100%></p>" >> crossover/README.md
