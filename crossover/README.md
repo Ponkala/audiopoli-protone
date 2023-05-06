@@ -1,4 +1,4 @@
-# crossover for active crossover
+# Docs for active crossover
 ## Front view
 <p align=center><img src=Docs/front.svg?sanitize=true width=100%></p>
 
