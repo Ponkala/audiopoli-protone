@@ -1,0 +1,64 @@
+name: Export Electronics
+on:
+  push:
+  pull_request:
+
+jobs:
+  export-electronics-classic:
+    name: Export Electronics diagrams
+    runs-on: ubuntu-latest    
+    steps:
+      - uses: actions/checkout@v3
+      - name: Add PPA        
+        run: sudo add-apt-repository ppa:kicad/kicad-7.0-releases -y > /dev/null
+
+      - name: Cache APT packages
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: kicad
+          version: 1.0
+
+      - name: Create Docs  
+        run: |
+
+          if [ -d "crossover/Docs" ]; then
+            rm -r crossover/Docs
+          fi
+          mkdir crossover/Docs
+
+      - name: Create schematic PDF + SVG
+        run: |
+          ls
+          kicad-cli sch export pdf -o  crossover/Docs/schematic.pdf crossover/*.kicad_sch
+          kicad-cli sch export svg -o  crossover/Docs/schematic/ crossover/*.kicad_sch
+
+      - name: Create front and back SVGs
+        run: |          
+          kicad-cli pcb export svg --page-size-mode=2 --exclude-drawing-sheet --layers Edge.Cuts,F.SilkS,F.Cu,User.3,In1.Cu   -o crossover/Docs/front.svg crossover/*.kicad_pcb
+          kicad-cli pcb export svg --page-size-mode=2 --exclude-drawing-sheet --layers Edge.Cuts,B.SilkS,B.Cu  -o crossover/Docs/back.svg crossover/*.kicad_pcb
+
+      - name: Generate README
+        run: |
+          if [ -f crossover/README.md ]; then
+              rm crossover/README.md
+          fi
+          echo "# crossover for active crossover" > crossover/README.md
+          echo "## Front view" >> crossover/README.md
+
+          echo "<p align="center"><img src="Docs/front.svg?sanitize=true" width=100%></p>" >> crossover/README.md
+          echo "" >> crossover/README.md
+
+          echo "## Back view" >> crossover/README.md
+          echo "<p align="center"><img src="Docs/back.svg?sanitize=true" width=100%></p>" >> crossover/README.md
+          echo "" >> crossover/README.md
+
+          echo "## Schematic" >> crossover/README.md
+          echo "<p align="center"><img src="Docs/schematic/AP-crossover.svg?sanitize=true" width=100%></p>" >> crossover/README.md
+          echo "" >> crossover/README.md
+
+      - uses: EndBug/add-and-commit@v9
+        with:
+          message: Show GitHub Actions logo
+          committer_name: GitHub Actions
+          committer_email: actions@github.com
+          add: '.'

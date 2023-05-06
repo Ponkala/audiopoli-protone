@@ -5,6 +5,12 @@
   )
 
   (paper "A4")
+  (title_block
+    (title "Active crossover for Audiopoli Protone speakers\n")
+    (date "2023-05-06")
+    (rev "B")
+  )
+
   (layers
     (0 "F.Cu" signal)
     (1 "In1.Cu" power)
@@ -5540,12 +5546,6 @@
     (effects (font (size 1 1) (thickness 0.15)) (justify left bottom))
   )
   (gr_text "B" (at 269 194) (layer "Dwgs.User") (tstamp 35909065-deb5-420c-a9db-3a30b618cc16)
-    (effects (font (size 1.5 1.5) (thickness 0.3) bold) (justify left bottom))
-  )
-  (gr_text "17.4.2023\n" (at 206.75 194) (layer "Dwgs.User") (tstamp 7242db74-047b-4e94-943a-bd4c2cac7de4)
-    (effects (font (size 1.5 1.5) (thickness 0.3) bold) (justify left bottom))
-  )
-  (gr_text "Active crossover for Audiopoli Protone speakers\n" (at 187.25 190.25) (layer "User.1") (tstamp 2f292951-d3ec-46be-ada2-5d25c80dbaef)
     (effects (font (size 1.5 1.5) (thickness 0.3) bold) (justify left bottom))
   )
   (gr_text "Layer definitions" (at 50.5 79.25) (layer "User.1") (tstamp 5c96f563-afe1-4f5f-b0c0-ea490ac1a5f8)
